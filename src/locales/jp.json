@@ -1,0 +1,16 @@
+{
+  "Precision": "秒までの精度",
+  "Precision_d": "秒針の表示",
+  "Timezone": "タイムゾーン",
+  "ClockType": "時計のタイプ",
+  "ClockType.traditional": "クラシックな文字盤",
+  "ClockType.digital": "デジタル文字盤",
+  "TraditionalClock.skin": "文字盤のスタイル",
+  "TraditionalClock.secHandSmooth": "秒針の滑らかな回転",
+  "DigitalClock.mode": "時間表示形式",
+  "DigitalClock.mode.12": "12 時間制",
+  "DigitalClock.mode.24": "24 時間制",
+  "DigitalClock.font": "フォント",
+  "Placeholder.pleaseSelect": "選択してください",
+  "Button.confirm": "確定"
+}

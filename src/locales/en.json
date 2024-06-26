@@ -1,0 +1,16 @@
+{
+  "Precision": "Accurate to seconds",
+  "Precision_d": "Display second hand",
+  "Timezone": "Time zone",
+  "ClockType": "Clock type",
+  "ClockType.traditional": "Classic clock face",
+  "ClockType.digital": "Digital clock face",
+  "TraditionalClock.skin": "Clock face style",
+  "TraditionalClock.secHandSmooth": "Smooth rotation of second hand",
+  "DigitalClock.mode": "Hour system",
+  "DigitalClock.mode.12": "12-hour system",
+  "DigitalClock.mode.24": "24-hour system",
+  "DigitalClock.font": "Font",
+  "Placeholder.pleaseSelect": "Please select",
+  "Button.confirm": "Confirm"
+}

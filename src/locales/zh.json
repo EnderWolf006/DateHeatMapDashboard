@@ -1,0 +1,21 @@
+{
+  "prompt.dataSource": "数据源",
+  "prompt.dataRange": "数据范围",
+  "prompt.dateField": "日期字段",
+  "prompt.displayRange": "显示范围",
+  "prompt.colorConfig": "颜色配置",
+  "prefix.view": "[视图]",
+  "placeholder.pleaseSelectTable": "请选择数据表",
+  "placeholder.pleaseSelectView": "请选择视图或全部数据",
+  "placeholder.pleaseSelectDateField": "请选择日期字段",
+  "displayRange.year": "年",
+  "displayRange.semester": "半年",
+  "displayRange.month": "月",
+  "header.repeatNum": "重复次数",
+  "header.color": "颜色",
+  "footer.addRow": "添加颜色",
+  "sourceType.all": "全部数据",
+  "error.text1": "请检查颜色重复次数配置是否正确",
+  "error.text2": "请检查填写是否完整",
+  "button.confirm": "确定"
+}
