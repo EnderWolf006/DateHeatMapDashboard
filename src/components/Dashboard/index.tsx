@@ -147,10 +147,7 @@ function ConfigPanel(props: {
   /**保存配置 */
   const onSaveConfig = () => {
     const cfg = configRef.current.handleSetConfig()
-
     if (!cfg) return
-    console.log(cfg);
-
     dashboard.saveConfig(cfg as any)
   }
 

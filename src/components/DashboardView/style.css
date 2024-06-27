@@ -1,5 +1,4 @@
 .space {
-  --bgc: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,6 +7,43 @@
   left: 0;
   right: 0;
   position: absolute;
-  overflow: hidden;
-  background-color: var(--bgc);
+  overflow-y: hidden;
+}
+
+.squareContainer {
+  /*主体部分高*/
+  --h: 70vh;
+  /*小方块边长*/
+  --a: 8vh;
+  /*小方块间隔*/
+  --gap: calc((var(--h) - (var(--a) * 7)) / 6.0);
+  height: var(--h);
+  display: flex;
+  position: relative;
+  gap: var(--gap);
+  margin-top: var(--margin-top);
+}
+
+.squareColumnContainer {
+  display: flex;
+  height: var(--h);
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.square {
+  box-sizing: border-box;
+  border-radius: calc(var(--a) * 0.1);
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  width: var(--a);
+  height: var(--a);
+  background-color: rgb(255, 255, 255);
+}
+
+.monthLabel {
+  position: absolute;
+  top: calc(100% + var(--gap));
+  font-size: calc(var(--a) * 0.8);
+  text-wrap: nowrap;
+  color: var(--text-shallow);
 }

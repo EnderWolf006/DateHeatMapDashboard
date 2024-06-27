@@ -159,7 +159,7 @@ function DashboardConfig(props: any, ref: any) {
         }
       })
       setViewList(l)
-      if (l.length > 0) {
+      if (l.length > 0 && isCreate) {
         setDataConditions({ ...dataConditions, dataRange: l[0].view })
       }
     })()
@@ -176,21 +176,13 @@ function DashboardConfig(props: any, ref: any) {
         }
       }))
       setFieldList(fl)
-      if (fl.length > 0) {
+      if (fl.length > 0 && !dataConditions.groups[0].fieldId) {
         setDataConditions({ ...dataConditions, groups: [{ fieldId: fl[0].value }] })
       }
     })()
   }, [dataConditions.tableId])
 
-  useEffect(() => {
-    (async () => {
-      const data = await dashboard.getPreviewData(dataConditions as any)
-      setCustomConfig({
-        ...customConfig,
-        previewData: data
-      })
-    })()
-  }, [dataConditions])
+  
 
   useImperativeHandle(ref, () => ({
     handleSetConfig() {
