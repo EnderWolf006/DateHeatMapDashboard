@@ -2,14 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { bitable, dashboard } from '@lark-base-open/js-sdk';
 import { Tooltip } from "@douyinfe/semi-ui";
+import dayjs from "dayjs";
 
-function daysToDate(days: number): string {
-  const startDate = new Date(1900, 0, 1);
-  startDate.setDate(startDate.getDate() + Math.floor(days - 2));
-  const year = startDate.getFullYear();
-  const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
-  const day = startDate.getDate().toString().padStart(2, '0');
-  return `${year}/${month}/${day}`;
+function dayjsFormat(date: any): string {
+  return dayjs(date).format("YYYY/MM/DD")
 }
 
 function getDates(months: number): { dates: string[], firstDayIndices: { index: number, month: number }[] } {
@@ -75,7 +71,7 @@ function handleData(data: any) {
   */
   const d = {} as any
   for (let i = 1; i < data.length; i++) {
-    const date = daysToDate(data[i][0].value);
+    const date = dayjsFormat(data[i][0].text);
     const count = data[i][1].value == '#DIV/0!' ? 0 : data[i][1].value;
     if (date in d) {
       d[date] += count
