@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import "./style.css";
-import { DashboardState, FieldType, IDataRange, SourceType, base, bitable, dashboard } from '@lark-base-open/js-sdk';
+import { DashboardState, FieldType, IDataRange, Rollup, SourceType, base, bitable, dashboard } from '@lark-base-open/js-sdk';
 import { Button, Checkbox, Input, Select, Toast } from "@douyinfe/semi-ui";
 import { defaultConfig } from "../Dashboard/index"
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -68,7 +68,7 @@ function ButtonSelect({ optionList, onChange, value }: any) {
 function DashboardConfig(props: any, ref: any) {
   const { config, setConfig, t } = props;
   const isCreate = dashboard.state === DashboardState.Create;
-  const { customConfig, dataConditions } = config as typeof defaultConfig;  
+  const { customConfig, dataConditions } = config as typeof defaultConfig;
   const setCustomConfig = (cfg: typeof customConfig) => {
     hasError = false;
     for (let i = 0; i < cfg.heatmapColorList.length; i++) {
@@ -102,7 +102,9 @@ function DashboardConfig(props: any, ref: any) {
 
   const [viewList, setViewList] = useState([]) as any
 
-  const [fieldList, setFieldList] = useState([]) as any
+  const [fieldList, setFieldList] = useState([]) as any // 日期字段列表
+
+  const [numFieldList, setNumFieldList] = useState([]) as any // 数字字段列表
 
   const [dragging, setDragging] = useState(false) as any
 
@@ -179,10 +181,26 @@ function DashboardConfig(props: any, ref: any) {
       if (fl.length > 0 && !dataConditions.groups[0].fieldId) {
         setDataConditions({ ...dataConditions, groups: [{ fieldId: fl[0].value }] })
       }
+      const nfl = ((await dashboard.getCategories(dataConditions.tableId)).filter((v: any) => {
+        return v.fieldType == FieldType.Number
+      }).map(category => {
+        return {
+          value: category.fieldId,
+          label: category.fieldName
+        }
+      }))
+      setNumFieldList(nfl)
+      if (fl.length > 1 && dataConditions.series !== 'COUNTA' && !dataConditions.series[0].fieldId) {        
+        setDataConditions({ ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: nfl[0].value }] })
+      }
     })()
-  }, [dataConditions.tableId])
+  }, [dataConditions.tableId, dataConditions.series])
 
-  
+  useEffect(() => { 
+    if (dataConditions.groups[0].fieldId == dataConditions.series[0].fieldId){
+      setDataConditions({ ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: null }] })
+    }
+  }, [dataConditions.groups[0].fieldId])
 
   useImperativeHandle(ref, () => ({
     handleSetConfig() {
@@ -250,6 +268,75 @@ function DashboardConfig(props: any, ref: any) {
       <div className="prompt">{t('prompt.displayRange')}</div>
       <ButtonSelect optionList={displayRangeOptionList} value={customConfig.dateRange} onChange={(e: any) => setCustomConfig({ ...customConfig, dateRange: e })} ></ButtonSelect>
 
+
+      <div className="prompt">{t('prompt.field')}</div>
+      <Select placeholder={'error???'} className="select" optionList={[{
+        value: 'COUNTA',
+        label: t('sourceType.counta')
+      },
+      {
+        value: 'value',
+        label: t('sourceType.value')
+      }]} onChange={(e) => {
+        if (e !== 'COUNTA') {
+          setDataConditions({
+            ...dataConditions, series: [{
+              fieldId: null,
+              rollup: Rollup.SUM
+            }]
+          })
+          return
+        }
+        setDataConditions({ ...dataConditions, series: 'COUNTA' })
+      }} value={dataConditions.series == 'COUNTA' ? 'COUNTA' : 'value'}
+      ></Select>
+
+      {
+        <>
+          {
+            dataConditions.series == 'COUNTA' || <>
+              <div className="prompt">{t('prompt.calcField')}</div>
+              <div className="select">
+                <Select placeholder={t('placeholder.pleaseSelectField')} style={{
+                  width: "calc(70% - 4px)"
+                }} optionList={numFieldList} onChange={(e) => {
+                  if (dataConditions.series === 'COUNTA') return
+                  setDataConditions({
+                    ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: e }]
+                  })
+                }} value={dataConditions.series == 'COUNTA' ? null : dataConditions.series[0].fieldId}></Select>
+
+                <Select placeholder={t('placeholder.pleaseSelectField')} style={{
+                  width: "calc(30% - 4px)",
+                  marginLeft: "8px"
+                }} optionList={[
+                  {
+                    value: Rollup.SUM,
+                    label: t('rollup.sum')
+                  },
+                  {
+                    value: Rollup.AVERAGE,
+                    label: t('rollup.avg')
+                  },
+                  {
+                    value: Rollup.MAX,
+                    label: t('rollup.max')
+                  },
+                  {
+                    value: Rollup.MIN,
+                    label: t('rollup.min')
+                  },
+                ]} onChange={(e) => {
+                  if (dataConditions.series === 'COUNTA') return
+                  setDataConditions({
+                    ...dataConditions, series: [{ ...dataConditions.series[0], rollup: e }]
+                  })
+                }} value={dataConditions.series == 'COUNTA' ? null : dataConditions.series[0].rollup}></Select>
+              </div>
+            </>
+          }
+        </>
+      }
       <div className="prompt">{t('prompt.colorConfig')}</div>
       <div className="colorSelectContainer">
         <div className="header">

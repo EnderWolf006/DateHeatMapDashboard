@@ -57,8 +57,6 @@
 }
 
 .colorSelectContainer {
-  max-height: 210px;
-  overflow-y: auto;
   overflow-x: hidden;
   background-color: #80808016;
   width: 100%;

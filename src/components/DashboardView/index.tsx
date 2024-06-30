@@ -3,6 +3,15 @@ import "./style.css";
 import { bitable, dashboard } from '@lark-base-open/js-sdk';
 import { Tooltip } from "@douyinfe/semi-ui";
 
+function daysToDate(days: number): string {
+  const startDate = new Date(1900, 0, 1);
+  startDate.setDate(startDate.getDate() + Math.floor(days - 2));
+  const year = startDate.getFullYear();
+  const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = startDate.getDate().toString().padStart(2, '0');
+  return `${year}/${month}/${day}`;
+}
+
 function getDates(months: number): { dates: string[], firstDayIndices: { index: number, month: number }[] } {
   const dates: string[] = [];
   const firstDayIndices: { index: number, month: number }[] = [];
@@ -66,10 +75,15 @@ function handleData(data: any) {
   */
   const d = {} as any
   for (let i = 1; i < data.length; i++) {
-    const date = data[i][0].text;
-    const count = data[i][1].value;
-    d[date] = count
+    const date = daysToDate(data[i][0].value);
+    const count = data[i][1].value == '#DIV/0!' ? 0 : data[i][1].value;
+    if (date in d) {
+      d[date] += count
+    } else
+      d[date] = count
   }
+  console.log(d);
+
   return d
 }
 
@@ -79,7 +93,6 @@ export function DashboardView(props: any) {
   const dataConditions = config.dataConditions
   const { dates, firstDayIndices } = getDates(customConfig.dateRange) as any
   const [data, setData] = useState<any>({})
-
   useEffect(() => {
     (async () => {
       setData(handleData(isConfig ? (await dashboard.getPreviewData(dataConditions) as any) : (await dashboard.getData() as any)))
@@ -111,6 +124,9 @@ export function DashboardView(props: any) {
                             <Tooltip content={t('tooltip.text', { date: dates[i + j], count: dates[i + j] in data ? data[dates[i + j]] : 0 })}>
                               <div className="square" style={(dates[i + j] in data) ? {
                                 backgroundColor: (() => {
+                                  if (data[dates[i + j]] == 0) {
+                                    return customConfig.heatmapColorList[0].color
+                                  }
                                   for (let n = 1; n < customConfig.heatmapColorList.length - 1; n++) {
                                     const front = customConfig.heatmapColorList[n - 1].frequency
                                     const current = customConfig.heatmapColorList[n].frequency

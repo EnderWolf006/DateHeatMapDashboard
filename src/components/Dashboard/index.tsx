@@ -17,7 +17,7 @@ export const defaultConfig = {
     heatmapColorList: [
       {
         frequency: 0,
-        color: '#F4F5F5' as any,
+        color: '#fafafa' as any,
       },
       {
         frequency: 1 as any,
@@ -59,7 +59,8 @@ export const defaultConfig = {
       {
         fieldId: null as any,
       }
-    ]
+    ],
+    series: 'COUNTA' as any
   }
 }
 
