@@ -21,7 +21,6 @@ main {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    padding-bottom: 14px;
     overflow: auto;
 }
 
@@ -31,13 +30,13 @@ main {
 }
 
 .layout-cfg-btn {
-    flex: 0 70px;
+    flex: 0 0 54px;
     position: relative;
 }
 
 .confirmButton {
     position: absolute;
-    top: 16px;
+    top: 0px;
     right: 16px;
     height: 38px;
     width: 100px;
