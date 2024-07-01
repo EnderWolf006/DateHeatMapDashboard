@@ -158,7 +158,7 @@ function ConfigPanel(props: {
         <DashboardConfig config={config} setConfig={setConfig} t={t} ref={configRef}></DashboardConfig>
       </div>
       <div className="layout-cfg-btn">
-        <Button type='primary' theme='solid' size='large' className='confirmButton' onClick={onSaveConfig}>{t('button.confirm')}</Button>
+        <Button type='primary' theme='solid' size='default' className='confirmButton' onClick={onSaveConfig}>{t('button.confirm')}</Button>
       </div>
     </>
   )

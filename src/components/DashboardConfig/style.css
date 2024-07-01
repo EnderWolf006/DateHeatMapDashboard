@@ -36,9 +36,9 @@
 }
 
 .buttonSelectItem {
-  width: 70px;
+  width: auto;
   border-radius: 8px;
-  padding: 8px;
+  padding: 7%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -192,4 +192,15 @@
 
 .addRow img {
   height: 14px;
+}
+.layout-cfg-main {
+  padding: 22px 24px 20px;
+}
+
+.semi-select {
+  width: 100%;
+}
+
+.select {
+  width: 100%;
 }

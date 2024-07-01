@@ -297,9 +297,14 @@ function DashboardConfig(props: any, ref: any) {
             dataConditions.series == 'COUNTA' || <>
               <div className="prompt">{t('prompt.calcField')}</div>
               <div className="select">
-                <Select placeholder={t('placeholder.pleaseSelectField')} style={{
-                  width: "calc(70% - 4px)"
-                }} optionList={numFieldList} onChange={(e) => {
+                <Select 
+                placeholder={t('placeholder.pleaseSelectField')} 
+                style={{width: "calc(70% - 4px)"}} 
+                optionList={numFieldList} 
+                filter
+                searchPosition="dropdown"
+                searchPlaceholder={t('placeholder.pleaseSelectField')}
+                onChange={(e) => {
                   if (dataConditions.series === 'COUNTA') return
                   setDataConditions({
                     ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: e }]
@@ -372,7 +377,6 @@ function DashboardConfig(props: any, ref: any) {
           </div>
         }
       </div>
-
     </>
   )
 }

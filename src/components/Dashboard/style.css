@@ -27,19 +27,20 @@ main {
 .layout-cfg-main {
     flex: 1;
     padding: 16px;
+    overflow: auto;
 }
 
 .layout-cfg-btn {
-    flex: 0 0 54px;
+
     position: relative;
+    height: 70px;
 }
 
 .confirmButton {
     position: absolute;
-    top: 0px;
-    right: 16px;
-    height: 38px;
-    width: 100px;
+    top: 10px;
+    right: 20px;
+    width: 80px;
 }
 
 .view {
