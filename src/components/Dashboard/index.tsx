@@ -14,6 +14,7 @@ export const defaultConfig = {
   customConfig: {
     dateRange: 12 as any,
     previewData: {} as any,
+    showLegend: true as any,
     heatmapColorList: [
       {
         frequency: 0,

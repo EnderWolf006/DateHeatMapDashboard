@@ -268,6 +268,7 @@ function DashboardConfig(props: any, ref: any) {
       <div className="prompt">{t('prompt.displayRange')}</div>
       <ButtonSelect optionList={displayRangeOptionList} value={customConfig.dateRange} onChange={(e: any) => setCustomConfig({ ...customConfig, dateRange: e })} ></ButtonSelect>
 
+      <Checkbox className="select" checked={customConfig.showLegend} onChange={(e:any)=>setCustomConfig({...customConfig, showLegend: e.target.checked})}>{t("showLegend")}</Checkbox>
 
       <div className="prompt">{t('prompt.field')}</div>
       <Select placeholder={'error???'} className="select" optionList={[{

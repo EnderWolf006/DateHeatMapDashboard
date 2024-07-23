@@ -40,5 +40,8 @@
   "month.9": "九月",
   "month.10": "十月",
   "month.11": "十一月",
-  "month.12": "十二月"
+  "month.12": "十二月",
+  "less": "少",
+  "more": "多",
+  "showLegend": "展示图例"
 }

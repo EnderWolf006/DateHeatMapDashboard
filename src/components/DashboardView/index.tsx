@@ -153,6 +153,24 @@ export function DashboardView(props: any) {
                   </div>
                 )
               }
+              if (customConfig.showLegend)
+                jsx.push(
+                  <div className="legend">
+                    <div className="legendLabel">{t("less")}</div>
+                    {
+                      (() => {
+                        let jsx3 = [];
+                        for (let k = 0; k < customConfig.heatmapColorList.length; k++) {
+                          jsx3.push(
+                            <div key={k} className="square" style={{ backgroundColor: customConfig.heatmapColorList[k].color }} />
+                          );
+                        }
+                        return jsx3
+                      })()
+                    }
+                    <div className="legendLabel">{t("more")}</div>
+                  </div>
+                )
               return jsx
             })()
           }

@@ -12,9 +12,9 @@
 
 .squareContainer {
   /*主体部分高*/
-  --h: 70vh;
+  --h: 60vh;
   /*小方块边长*/
-  --a: 8vh;
+  --a: 7vh;
   /*小方块间隔*/
   --gap: calc((var(--h) - (var(--a) * 7)) / 6.0);
   height: var(--h);
@@ -46,4 +46,18 @@
   font-size: calc(var(--a) * 0.8);
   text-wrap: nowrap;
   color: var(--text-shallow);
+}
+
+.legend {
+  display: flex;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  gap: var(--gap);
+  transform: translateY(calc(100% +  3 * var(--gap) + var(--a) * 0.8 ));
+}
+
+.legendLabel {
+  font-size: var(--a);
+  opacity: 0.65;
 }
