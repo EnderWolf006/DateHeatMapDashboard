@@ -1,4 +1,4 @@
-import { DashboardState, bitable, dashboard } from "@lark-base-open/js-sdk";
+import { DashboardState, ThemeModeType, bitable, dashboard } from "@lark-base-open/js-sdk";
 import React from "react";
 import { useLayoutEffect } from "react";
 
@@ -9,13 +9,13 @@ function updateTheme(theme: string) {
 /** 跟随主题色变化 */
 export function useTheme() {
   useLayoutEffect(() => {
-    bitable.bridge.getTheme().then((theme: string) => {
-      updateTheme(theme.toLocaleLowerCase())
+    dashboard.getTheme().then((res) => {
+      updateTheme(res.theme == ThemeModeType.DARK ? 'dark' : 'light');
     })
-
-    bitable.bridge.onThemeChange((e) => {
-      updateTheme(e.data.theme.toLocaleLowerCase())
-    })
+    
+    dashboard.onThemeChange(res => {
+      updateTheme(res.data.theme == ThemeModeType.DARK ? 'dark' : 'light');
+    });
   }, [])
 }
 
