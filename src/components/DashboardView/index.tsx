@@ -8,10 +8,10 @@ function dayjsFormat(date: any): string {
   return dayjs(date).format("YYYY/MM/DD")
 }
 
-function getDates(months: number): { dates: string[], firstDayIndices: { index: number, month: number }[] } {
+function getDates(months: number, startDate: string): { dates: string[], firstDayIndices: { index: number, month: number }[] } {
   const dates: string[] = [];
   const firstDayIndices: { index: number, month: number }[] = [];
-  const currentDate = new Date();
+  let currentDate = new Date();
 
   // 获取当月的最后一天
   const getLastDayOfMonth = (date: Date): Date => {
@@ -34,7 +34,13 @@ function getDates(months: number): { dates: string[], firstDayIndices: { index: 
   // 设置目标日期为当前日期减去月份数后的月份第一天
   const targetDate = new Date(currentDate);
   targetDate.setMonth(currentDate.getMonth() - months + 1);
-  const targetFirstDay = getFirstDayOfMonth(targetDate);
+  let targetFirstDay = getFirstDayOfMonth(targetDate);
+
+  if (startDate != undefined) {
+    targetFirstDay = getFirstDayOfMonth(dayjs(startDate).toDate());
+    currentDate = new Date(targetFirstDay);
+    currentDate.setMonth(targetFirstDay.getMonth() + months - 1);
+  }
 
   // 获取当前月份的最后一天
   let currentLastDay = getLastDayOfMonth(currentDate);
@@ -69,14 +75,17 @@ function handleData(data: any) {
   2024/05/07 1
   ...
   */
+  console.log(data.length);
+
   const d = {} as any
   for (let i = 1; i < data.length; i++) {
     const date = dayjsFormat(data[i][0].text);
     const count = data[i][1].value == '#DIV/0!' ? 0 : data[i][1].value;
     if (date in d) {
       d[date] += count
-    } else
+    } else {
       d[date] = count
+    }
   }
   console.log(d);
 
@@ -87,7 +96,7 @@ export function DashboardView(props: any) {
   const { config, isConfig, t } = props;
   const customConfig = config.customConfig
   const dataConditions = config.dataConditions
-  const { dates, firstDayIndices } = getDates(customConfig.dateRange) as any
+  const { dates, firstDayIndices } = getDates(customConfig.dateRange, customConfig.startDate) as any
   const [data, setData] = useState<any>({})
   useEffect(() => {
     (async () => {
@@ -175,7 +184,7 @@ export function DashboardView(props: any) {
             })()
           }
         </div>
-      </div >
+      </div>
     </>
   )
 }

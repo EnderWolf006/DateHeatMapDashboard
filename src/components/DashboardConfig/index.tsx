@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import "./style.css";
 import { DashboardState, FieldType, IDataRange, Rollup, SourceType, base, bitable, dashboard } from '@lark-base-open/js-sdk';
-import { Button, Checkbox, Input, Select, Toast } from "@douyinfe/semi-ui";
+import { Button, Checkbox, DatePicker, Input, Select, Toast } from "@douyinfe/semi-ui";
 import { defaultConfig } from "../Dashboard/index"
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { deepCopy } from '@gby/deep-copy'
@@ -108,20 +108,25 @@ function DashboardConfig(props: any, ref: any) {
 
   const [dragging, setDragging] = useState(false) as any
 
-  const displayRangeOptionList = [
-    {
-      value: 12,
-      label: t("displayRange.year")
-    },
-    {
-      value: 6,
-      label: t("displayRange.semester")
-    },
-    {
-      value: 1,
-      label: t("displayRange.month")
-    },
-  ]
+  // const displayRangeOptionList = [
+  //   {
+  //     value: 12,
+  //     label: t("displayRange.year")
+  //   },
+  //   {
+  //     value: 6,
+  //     label: t("displayRange.semester")
+  //   },
+  //   {
+  //     value: 3,
+  //     label: t("displayRange.quarter")
+  //   },
+  //   {
+  //     value: 1,
+  //     label: t("displayRange.month")
+  //   },
+    
+  // ]
 
   useEffect(() => {
     // tableList 初始化
@@ -190,14 +195,14 @@ function DashboardConfig(props: any, ref: any) {
         }
       }))
       setNumFieldList(nfl)
-      if (fl.length > 1 && dataConditions.series !== 'COUNTA' && !dataConditions.series[0].fieldId) {        
+      if (fl.length > 1 && dataConditions.series !== 'COUNTA' && !dataConditions.series[0].fieldId) {
         setDataConditions({ ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: nfl[0].value }] })
       }
     })()
   }, [dataConditions.tableId, dataConditions.series])
 
-  useEffect(() => { 
-    if (dataConditions.groups[0].fieldId == dataConditions.series[0].fieldId){
+  useEffect(() => {
+    if (dataConditions.groups[0].fieldId == dataConditions.series[0].fieldId) {
       setDataConditions({ ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: null }] })
     }
   }, [dataConditions.groups[0].fieldId])
@@ -259,6 +264,9 @@ function DashboardConfig(props: any, ref: any) {
       <div className="prompt">{t('prompt.dataSource')}</div>
       <Select placeholder={t('placeholder.pleaseSelectTable')} className="select" optionList={tableList} onChange={(e) => { setDataConditions({ ...dataConditions, tableId: e as string }) }} value={dataConditions.tableId}></Select>
 
+      <div className="prompt">{t('prompt.startDate')}</div>
+      <DatePicker disabledDate={(date)=>{return date!.getTime() >= new Date().getTime()}} type="month" insetInput className="select" onChange={(e) => { setCustomConfig({ ...customConfig, startDate: e }) }} value={customConfig.startDate} />
+
       <div className="prompt">{t('prompt.dataRange')}</div>
       <Select placeholder={t('placeholder.pleaseSelectView')} className="select" optionList={viewList} onSelect={(v, option) => { setDataConditions({ ...dataConditions, dataRange: option.view }) }} value={viewList.length ? (dataConditions.dataRange.type == 'ALL' ? 'all' : dataConditions.dataRange.viewId) : null}></Select>
 
@@ -266,9 +274,10 @@ function DashboardConfig(props: any, ref: any) {
       <Select placeholder={t('placeholder.pleaseSelectDateField')} className="select" optionList={fieldList} onChange={(e) => { setDataConditions({ ...dataConditions, groups: dataConditions.groups.map((v, i) => { if (i == 0) return { ...v, fieldId: e }; return v }) }) }} value={dataConditions.groups[0].fieldId}></Select>
 
       <div className="prompt">{t('prompt.displayRange')}</div>
-      <ButtonSelect optionList={displayRangeOptionList} value={customConfig.dateRange} onChange={(e: any) => setCustomConfig({ ...customConfig, dateRange: e })} ></ButtonSelect>
+      <Select placeholder={t('placeholder.pleaseSelectDateField')} className="select" optionList={new Array(12).fill(0, 0, 12).map((e, index) =>{return {label: (index + 1).toString() + t('displayRange.months'), value: index + 1}})} onChange={(e: any) => setCustomConfig({ ...customConfig, dateRange: e })} value={customConfig.dateRange}></Select>
+      {/* <ButtonSelect optionList={displayRangeOptionList} value={customConfig.dateRange} onChange={(e: any) => setCustomConfig({ ...customConfig, dateRange: e })} ></ButtonSelect> */}
 
-      <Checkbox className="select" checked={customConfig.showLegend} onChange={(e:any)=>setCustomConfig({...customConfig, showLegend: e.target.checked})}>{t("showLegend")}</Checkbox>
+      <Checkbox className="select" checked={customConfig.showLegend} onChange={(e: any) => setCustomConfig({ ...customConfig, showLegend: e.target.checked })}>{t("showLegend")}</Checkbox>
 
       <div className="prompt">{t('prompt.field')}</div>
       <Select placeholder={'error???'} className="select" optionList={[{
@@ -298,19 +307,19 @@ function DashboardConfig(props: any, ref: any) {
             dataConditions.series == 'COUNTA' || <>
               <div className="prompt">{t('prompt.calcField')}</div>
               <div className="select">
-                <Select 
-                placeholder={t('placeholder.pleaseSelectField')} 
-                style={{width: "calc(70% - 4px)"}} 
-                optionList={numFieldList} 
-                filter
-                searchPosition="dropdown"
-                searchPlaceholder={t('placeholder.pleaseSelectField')}
-                onChange={(e) => {
-                  if (dataConditions.series === 'COUNTA') return
-                  setDataConditions({
-                    ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: e }]
-                  })
-                }} value={dataConditions.series == 'COUNTA' ? null : dataConditions.series[0].fieldId}></Select>
+                <Select
+                  placeholder={t('placeholder.pleaseSelectField')}
+                  style={{ width: "calc(70% - 4px)" }}
+                  optionList={numFieldList}
+                  filter
+                  searchPosition="dropdown"
+                  searchPlaceholder={t('placeholder.pleaseSelectField')}
+                  onChange={(e) => {
+                    if (dataConditions.series === 'COUNTA') return
+                    setDataConditions({
+                      ...dataConditions, series: [{ ...dataConditions.series[0], fieldId: e }]
+                    })
+                  }} value={dataConditions.series == 'COUNTA' ? null : dataConditions.series[0].fieldId}></Select>
 
                 <Select placeholder={t('placeholder.pleaseSelectField')} style={{
                   width: "calc(30% - 4px)",

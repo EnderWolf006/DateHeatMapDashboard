@@ -14,6 +14,8 @@ export const defaultConfig = {
   customConfig: {
     dateRange: 12 as any,
     previewData: {} as any,
+    rangeStrategy: 'recent' as any, // recent / custom
+    startDate: undefined as any,
     showLegend: true as any,
     heatmapColorList: [
       {
@@ -104,7 +106,7 @@ export default function Dashboard() {
   useConfig(updateConfig)
 
   return (
-    <main style={isConfig ? {backgroundColor: "var(--cbgc)"} : { borderTop: 'none',backgroundColor: "var(--cbgc)" }}>
+    <main style={isConfig ? { backgroundColor: "var(--cbgc)" } : { borderTop: 'none', backgroundColor: "var(--cbgc)" }}>
       <div className='layout-view' >
         <_DashboardView
           t={t}
